@@ -1,0 +1,41 @@
+Comparison operators:
+db.movieDetails.find({"tomato.meter": {$gt: 90, $lte: 100}})
+$ne: not equal, or not existing {$ne: "UNRATED"}
+$in:
+db.movieDetails.find({rated: {$in: ["PG-13", "P"]}, "tomato.meter": 100})
+
+Element operators: "shape" of the document
+$exist: have this field
+{"tomato.meter": {$exists: true}}
+$type: Select documents if a field is of the specified type
+{"_id": {$type: "string"}}
+
+Logical operators:
+$or: db.movieDetails.find({$or: [{rated: "PG-13",}, {"tomato.meter": 100}]})
+$and: only necessary if we need to specify the same field twice 
+$not
+$nor
+
+Regex operator:
+db.movieDetails.find({"awards.text": {$regex: /^Won\s.*/}})
+
+Array operator:
+$all: Matches arrays that contain all elements specified in the query
+{genres: {$all: ["Comedy", "Crime", "Drama"]}}
+$elemMatch: Selects documents if element in the array field matches all the specified conditions
+boxOffice: [ { "country": "USA", "revenue": 41.3 },
+             { "country": "Australia", "revenue": 2.9 },
+             { "country": "UK", "revenue": 10.1 },
+             { "country": "Germany", "revenue": 4.3 },
+             { "country": "France", "revenue": 3.5 } ]
+If we do:
+db.movieDetails.find({ boxOffice: { country: "UK", revenue: { $gt: 15 } } } ) 
+it is a match, since we have the UK, and then the revenue in the US
+
+Proper way of doing so:
+db.movieDetails.find({ boxOffice: {$elemMatch: { country: "UK", revenue: { $gt: 15 } } } })
+All criteria fulfilled in the same element of the array field
+
+
+$size: Selects documents if the array field is a specific size
+{countries: {$size: 1}}

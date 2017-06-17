@@ -1,0 +1,70 @@
+Model-View-Controller
+
+Model keeps the state -> MongoDB is attached here
+View -> What the user sees
+Controller: takes user input and manipulates the user
+
+
+Create the Model
+
+Let's start with our model. This is the portion of our program that handles the data storage. Bottle can easily implement a variety of backends for data through the use of plugins.
+
+sudo apt-get install sqlite
+pip install bottle-sqlite
+
+import sqlite3
+db = sqlite3.connect('picnic.db')
+db.execute("CREATE TABLE picnic (id INTEGER PRIMARY KEY, item CHAR(100) NOT NULL, quant INTEGER NOT NULL)")
+db.execute("INSERT INTO picnic (item,quant) VALUES ('bread', 4)")
+db.execute("INSERT INTO picnic (item,quant) VALUES ('cheese', 2)")
+db.execute("INSERT INTO picnic (item,quant) VALUES ('grapes', 30)")
+db.execute("INSERT INTO picnic (item,quant) VALUES ('cake', 1)")
+db.execute("INSERT INTO picnic (item,quant) VALUES ('soda', 4)")
+db.commit()
+
+
+Create the Controller
+
+Now that we have a database created, we can start to develop our main application. This will mainly implement our controller functionality. It will also be the file that most closely resembles our first application.
+
+import sqlite3
+from bottle import route, run, template
+
+@route('/picnic')
+def show_picnic():
+    db = sqlite3.connect('picnic.db')
+    c = db.cursor()
+    c.execute("SELECT item,quant FROM picnic")
+    data = c.fetchall()
+    c.close()
+    output = template('bring_to_picnic', rows=data)
+    return output
+
+run(host='0.0.0.0', port=8080)
+
+You can call the template in two ways:
+1- Named parameters
+2- Dictionary
+
+Create the View
+
+Now that we have our model and controller, the only thing left to create is our view. This is handled easily using Bottle's built-in template engine.
+
+The application will search for a template matching the name given in the template function, ending with .tpl. This can either be in the project's main directory, or in a directory called "view".
+
+<h1>Things to bring to our picnic</h1>
+<table>
+<tr><th>Item</th><th>Quantity</th></tr>
+%for row in rows:
+    <tr>
+    %for col in row:
+        <td>{{col}}</td>
+    %end
+    </tr>
+%end
+</table>
+
+python picnic.py
+http://your_ip:8080/picnic
+
+

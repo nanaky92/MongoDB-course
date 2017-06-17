@@ -1,0 +1,6 @@
+db.movieScratch.insertMany()
+db.movieScratch.insertOne()
+upserts -> Update with selectors that dont match any doc
+
+_id: you can specify your own, created by default: ObjectId
+

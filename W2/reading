@@ -1,0 +1,16 @@
+db.movieDetails.find({rated: {$in: ["PG-13", "P"]}, "tomato.meter": 100})
+
+Matches in arrays:
+-On the entire array: "writers": ["Ethan Coen", "Joel Coen"] order matters
+-One of the elements of the array: "actors" : "Leonardo diCaprio"
+-In one of the positions of the array: "actors.0": "Leonardo diCaprio"
+
+find->returns a batch of 101 docs or 1MB, next of 4MB
+var c = db.movieDetails.find()
+c.objsLeftInBatch(); 101
+
+Projections: 
+db.movieDetails.find({"tomato.meter": 100}, {"title":1, "_id": 0})
+by default, all excluded except for the _id, that is included (we need to say no with the 0)
+db.movieDetails.find({"tomato.meter": 100}, {"tomato":0, "_id": 0})
+if everything is negative: only positives

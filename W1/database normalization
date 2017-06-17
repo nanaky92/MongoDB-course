@@ -1,0 +1,35 @@
+INSERT ANOMALY: This refers to the situation when it is impossible to insert certain types of data into the database.
+
+DELETE ANOMALY: The deletion of data leads to unintended loss of additional data, data that we had wished to preserve.
+
+UPDATE ANOMALY: This refers to the situation where updating the value of a column leads to database inconsistencies (i.e., different rows on the table have different values).
+
+
+
+1NF:
+A database is in first normal form if it satisfies the following conditions:
+
+Contains only atomic values
+There are no repeating groups
+
+An atomic value is a value that cannot be divided. For example, in the table shown below, the values in the [Color] column in the first row can be divided into "red" and "green", hence [TABLE_PRODUCT] is not in 1NF.
+
+
+2NF:
+http://www.1keydata.com/database-normalization/second-normal-form-2nf.php
+In a table, if attribute B is functionally dependent on A, but is not functionally dependent on a proper subset of A, then B is considered fully functional dependent on A. Hence, in a 2NF table, all non-key attributes cannot be dependent on a subset of the primary key.
+
+This table has a composite primary key [Customer ID, Store ID]. The non-key attribute is [Purchase Location]. In this case, [Purchase Location] only depends on [Store ID], which is only part of the primary key. Therefore, this table does not satisfy second normal form.
+
+3NF:
+A database is in third normal form if it satisfies the following conditions:
+
+It is in second normal form
+There is no transitive functional dependency
+
+By transitive functional dependency, we mean we have the following relationships in the table: A is functionally dependent on B, and B is functionally dependent on C. In this case, C is transitively dependent on A via B.
+
+In the table able, [Book ID] determines [Genre ID], and [Genre ID] determines [Genre Type]. Therefore, [Book ID] determines [Genre Type] via [Genre ID] and we have transitive functional dependency, and this structure does not satisfy third normal form.
+
+
+
